@@ -1,15 +1,26 @@
 SpaceShip af1;
+Star [] sky;
 double accel = .5;
 public void setup() 
 {
   size(600,600);
   af1=new SpaceShip();
+  sky = new Star [200];
+  for(int i=0;i<sky.length;i++)
+  {
+    sky[i]=new Star();
+  }
+
 }
 public void draw() 
 {
   background(50);
   af1.show();
   af1.move();
+  for(int i=0;i<sky.length;i++)
+  {
+    sky[i].show();
+  }
 }
 public void keyPressed()
 {
@@ -66,6 +77,16 @@ class SpaceShip extends Floater
   public double getDirectionY(){return myDirectionY;}  
   public void setPointDirection(int degrees){myPointDirection=degrees;}  
   public double getPointDirection(){return myPointDirection;} 
+ /* public void show()
+    {
+      if (keyCode==UP)
+      {
+        int xLineRotatedTranslated, xLineRotatedTranslated; linex1, liney1, linex2, liney2
+        int [] speedline}
+        xLineRotatedTranslated = (int)((xCorners[nI]* Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians))+myCenterX);     
+        yLineRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY); 
+      }
+    }*/
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
@@ -143,4 +164,19 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     endShape(CLOSE);  
   }   
 } 
-
+class Star
+{
+    private int myX, myY;
+    private color starColor;
+  public Star()
+  {
+    myX=(int)(Math.random()*600);
+    myY=(int)(Math.random()*600);
+    starColor = color(255);
+  }
+  public void show()
+  {
+    fill(starColor);
+    ellipse(myX, myY, 3, 3);
+  }
+}
