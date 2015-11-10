@@ -1,29 +1,43 @@
 SpaceShip af1;
 Star [] sky;
+boolean up = false;
+boolean down = false;
+boolean left = false;
+boolean right = false;
 double accel = .5;
-Asteroid bob;
+Asteroid [] rock;
 public void setup() 
 {
   size(600,600);
   af1=new SpaceShip();
   sky = new Star [200];
+  rock = new Asteroid [15];
   for(int i=0;i<sky.length;i++)
   {
     sky[i]=new Star();
   }
- bob = new Asteroid();
+  for(int i=0;i<rock.length;i++)
+  {
+    rock[i]=new Asteroid();
+  }
 }
 public void draw() 
 {
   background(50);
   af1.show();
   af1.move();
+  af1.controls();
   for(int i=0;i<sky.length;i++)
   {
     sky[i].show();
   }
-  bob.show();
+  for(int i=0;i<rock.length;i++)
+  {
+    rock[i].show();
+    rock[i].move();
+  }
 }
+/*
 public void keyPressed()
 {
   if (keyCode==UP)
@@ -41,6 +55,44 @@ public void keyPressed()
   if (keyCode==RIGHT)
   {
     af1.rotate(5);
+  }
+}*/
+public void keyPressed()
+{
+  if(keyCode == LEFT)
+  {
+    left = true;
+  }
+  if (keyCode == RIGHT)
+  {
+    right = true;
+  }
+  if(keyCode == UP)
+  {
+    up = true;
+  }
+  if (keyCode == DOWN)
+  {
+    down = true;
+  }
+}
+public void keyReleased() 
+{
+  if(keyCode == LEFT)
+  {
+    left = false;  
+  }
+  if(keyCode == RIGHT)
+  {
+    right = false;
+  }
+  if(keyCode == UP)
+  {
+    up = false;
+  }
+  if (keyCode == DOWN)
+  {
+    down = false;
   }
 }
 public void keyTyped()
@@ -79,7 +131,27 @@ class SpaceShip extends Floater
   public void setDirectionY(double y){myDirectionY=y;}    
   public double getDirectionY(){return myDirectionY;}  
   public void setPointDirection(int degrees){myPointDirection=degrees;}  
-  public double getPointDirection(){return myPointDirection;} 
+  public double getPointDirection(){return myPointDirection;}
+  public void controls()
+  {
+  if(left == true)
+  {
+    af1.rotate(-5);    
+  }
+  if(right == true)
+  {
+    af1.rotate(5);
+  }
+  if(up == true)
+  {
+    af1.accelerate(0.1);
+  }
+  if(down == true)
+  {
+    af1.accelerate(-0.1);
+  }
+}
+  } 
  /* public void show()
     {
       if (keyCode==UP)
@@ -90,22 +162,24 @@ class SpaceShip extends Floater
         yLineRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY); 
       }
     }*/
-}
+
 class Asteroid extends Floater
 {
+  private int rotationSpeed;
     public Asteroid()
   {
     corners=6;
-    int[] xS = {10,5,-5,-10,-5,5};
-    int[] yS = {0,5,5,0,-5,-5};
+    int[] xS = {20,10,-10,-20,-10,10};
+    int[] yS = {0,-17,-17,0,17,17};
     xCorners = xS;
     yCorners = yS;
     myColor = 255;
-    myCenterX=300;
-    myCenterY=300;
-    myDirectionX=0;
-    myDirectionY=0;
-    myPointDirection=0;
+    myCenterX=Math.random()*601;
+    myCenterY=Math.random()*601;
+    myDirectionX=(Math.random()*7-3);
+    myDirectionY=(Math.random()*7-3);
+    myPointDirection=(int)(Math.random()*360);
+    rotationSpeed=(int)(Math.random()*12-5);
   }  
   public void setX(int x){myCenterX=x;}  
   public int getX(){return (int)myCenterX;}   
@@ -117,7 +191,13 @@ class Asteroid extends Floater
   public double getDirectionY(){return myDirectionY;}  
   public void setPointDirection(int degrees){myPointDirection=degrees;}  
   public double getPointDirection(){return myPointDirection;} 
+  public void move()
+{
+  rotate(rotationSpeed);
+  super.move();
 }
+}
+
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
