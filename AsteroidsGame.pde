@@ -4,21 +4,22 @@ boolean up = false;
 boolean down = false;
 boolean left = false;
 boolean right = false;
-double accel = .5;
-Asteroid [] rock;
+double accel = .2;
+ArrayList <Asteroid> rock;
 public void setup() 
 {
   size(600,600);
   af1=new SpaceShip();
   sky = new Star [200];
-  rock = new Asteroid [15];
+  rock = new ArrayList <Asteroid>();
+
   for(int i=0;i<sky.length;i++)
   {
     sky[i]=new Star();
   }
-  for(int i=0;i<rock.length;i++)
+  for(int i=0;i<16;i++)
   {
-    rock[i]=new Asteroid();
+    rock.add (new Asteroid());
   }
 }
 public void draw() 
@@ -31,10 +32,14 @@ public void draw()
   {
     sky[i].show();
   }
-  for(int i=0;i<rock.length;i++)
+  for(int i=0;i<rock.size();i++)
   {
-    rock[i].show();
-    rock[i].move();
+    rock.get(i).show();
+    rock.get(i).move();
+    if(dist((float)rock.get(i).getX(),(float)rock.get(i).getY(),(float)af1.getX(),(float)af1.getY())<20)
+      {
+        rock.remove(i);
+      }
   }
 }
 /*
@@ -144,11 +149,11 @@ class SpaceShip extends Floater
   }
   if(up == true)
   {
-    af1.accelerate(0.1);
+    af1.accelerate(accel);
   }
   if(down == true)
   {
-    af1.accelerate(-0.1);
+    af1.accelerate(-accel);
   }
 }
   } 
@@ -194,6 +199,7 @@ class Asteroid extends Floater
   public void move()
 {
   rotate(rotationSpeed);
+
   super.move();
 }
 }
