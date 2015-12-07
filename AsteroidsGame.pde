@@ -6,13 +6,14 @@ boolean left = false;
 boolean right = false;
 double accel = .2;
 ArrayList <Asteroid> rock;
+ArrayList <Bullet> shot;
 public void setup() 
 {
   size(600,600);
   af1=new SpaceShip();
   sky = new Star [200];
   rock = new ArrayList <Asteroid>();
-
+  shot = new ArrayList <Bullet>();
   for(int i=0;i<sky.length;i++)
   {
     sky[i]=new Star();
@@ -20,6 +21,7 @@ public void setup()
   for(int i=0;i<16;i++)
   {
     rock.add (new Asteroid());
+    shot.add (new Bullet(af1));
   }
 }
 public void draw() 
@@ -40,6 +42,11 @@ public void draw()
       {
         rock.remove(i);
       }
+  }
+  for(int i=0;i<shot.size();i++)
+  {
+    shot.get(i).show();
+    shot.get(i).move();
   }
 }
 /*
@@ -167,7 +174,35 @@ class SpaceShip extends Floater
         yLineRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY); 
       }
     }*/
-
+class Bullet extends Floater
+{
+  private double dRadians ;
+  public Bullet(SpaceShip theShip)
+  {
+    myCenterX=theShip.getX();
+    myCenterY=theShip.getY();
+    myPointDirection=theShip.getPointDirection();
+    myDirectionX=theShip.getDirectionX();
+    myDirectionY=theShip.getDirectionY();
+    myColor = 255;
+    dRadians=myPointDirection*(Math.PI/180);
+  }
+  public void show()
+  {
+    fill(myColor);
+    ellipse((float)myCenterX,(float)myCenterY,5,5);
+  }
+    public void setX(int x){myCenterX=x;}  
+  public int getX(){return (int)myCenterX;}   
+  public void setY(int y){myCenterY=y;}   
+  public int getY(){return (int)myCenterY;}   
+  public void setDirectionX(double x){myDirectionX=x;}    
+  public double getDirectionX(){return myDirectionX;}  
+  public void setDirectionY(double y){myDirectionY=y;}    
+  public double getDirectionY(){return myDirectionY;}  
+  public void setPointDirection(int degrees){myPointDirection=degrees;}  
+  public double getPointDirection(){return myPointDirection;}
+}
 class Asteroid extends Floater
 {
   private int rotationSpeed;
