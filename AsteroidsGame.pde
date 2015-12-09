@@ -21,7 +21,7 @@ public void setup()
   for(int i=0;i<16;i++)
   {
     rock.add (new Asteroid());
-    shot.add (new Bullet(af1));
+   // shot.add (new Bullet(af1));
   }
 }
 public void draw() 
@@ -41,7 +41,17 @@ public void draw()
     if(dist((float)rock.get(i).getX(),(float)rock.get(i).getY(),(float)af1.getX(),(float)af1.getY())<20)
       {
         rock.remove(i);
+        break;
       }
+    for(int g=0;g<shot.size();g++)
+    {
+      if(dist((float)rock.get(i).getX(),(float)rock.get(i).getY(),(float)shot.get(g).getX(),(float)shot.get(g).getY())<20)
+      {
+        rock.remove(i);
+        shot.remove(g);
+        break;
+      }
+    }
   }
   for(int i=0;i<shot.size();i++)
   {
@@ -117,6 +127,10 @@ public void keyTyped()
      af1.setY((int)(Math.random()*600));
      af1.setPointDirection((int)(Math.random()*360));
   }
+  if(key == 'g')
+  {
+    shot.add (new Bullet(af1));
+  }
 }
 class SpaceShip extends Floater  
 { 
@@ -182,10 +196,11 @@ class Bullet extends Floater
     myCenterX=theShip.getX();
     myCenterY=theShip.getY();
     myPointDirection=theShip.getPointDirection();
-    myDirectionX=theShip.getDirectionX();
-    myDirectionY=theShip.getDirectionY();
-    myColor = 255;
     dRadians=myPointDirection*(Math.PI/180);
+    myDirectionX=5*Math.cos(dRadians)+theShip.getDirectionX();
+    myDirectionY=5*Math.sin(dRadians)+theShip.getDirectionY();
+    myColor = 255;
+    
   }
   public void show()
   {
